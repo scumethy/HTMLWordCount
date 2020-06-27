@@ -2,28 +2,25 @@ import java.io.*;
 
 public class WordCounter {
 
-    private String outpFilePath;
-    private String outpFullFilePath;
-    private final String uniqFileFullPath;
-    private final String resFileFullPath;
+    private final String outpFilePath;
+    private final String uniqFilePath;
 
-    public WordCounter(String path) {
-        outpFilePath = path;
-        outpFullFilePath = outpFilePath + "outp.txt";
-        uniqFileFullPath = outpFilePath + "uniq.txt";
-        resFileFullPath = outpFilePath + "res.txt";
+    public WordCounter(String outpFilePath, String uniqFilePath) {
+        this.outpFilePath = outpFilePath;
+        this.uniqFilePath = uniqFilePath;
     }
 
-    public void run() throws FileNotFoundException {
-        getUniqWords1(outpFullFilePath, uniqFileFullPath);
-        countCopies(outpFullFilePath, uniqFileFullPath, resFileFullPath);
+    public void count() {
+        getUniqWords();
+        countCopies();
     }
 
-    private void countCopies(String outpFilePath, String uniqFilePath, String resFilePath) {
+    private void countCopies() {
         try (BufferedReader fileBufferReader1 = new BufferedReader(new FileReader(uniqFilePath))) {
             String uniqWord;
             String word;
             int wordCount = 0;
+            System.out.println("Частотный словарь HTMl контента введённой страницы:");
             while ((uniqWord = fileBufferReader1.readLine()) != null) {
                 try (BufferedReader fileBufferReader2 = new BufferedReader(new FileReader(outpFilePath))) {
                     while ((word = fileBufferReader2.readLine()) != null) {
@@ -40,29 +37,7 @@ public class WordCounter {
         }
     }
 
-    /*private void getUniqWords(String outpFilePath, String uniqFilePath) throws FileNotFoundException {
-        try (BufferedReader wordsFileReader = new BufferedReader(new FileReader(outpFilePath))) {
-            try (RandomAccessFile uniqWordsFileWriter = new RandomAccessFile(uniqFilePath, "rw")) {
-                FileOutputStream fos = new FileOutputStream(uniqWordsFileWriter.getFD());
-                OutputStreamWriter osw = new OutputStreamWriter(fos);
-
-                String word = "";
-                while ((word = wordsFileReader.readLine()) != null) {
-                    if (!isCopy(word, uniqWordsFileWriter)) {
-                        osw.write(word + '\n');
-                        osw.flush();
-                    }
-                }
-
-                osw.close();
-                fos.close();
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }*/
-
-    private void getUniqWords1(String outpFilePath, String uniqFilePath) throws FileNotFoundException {
+    private void getUniqWords() {
         try (BufferedReader wordsFileReader = new BufferedReader(new FileReader(outpFilePath))) {
 
             String word = "";
