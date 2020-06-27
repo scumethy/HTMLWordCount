@@ -9,9 +9,9 @@ public class HTMLParser {
     private String outpFileFullPath;
     private String htmlFileFullPath;
 
-    public HTMLParser(String outpFilePath, String htmlFilepath) {
+    public HTMLParser(String outpFilePath, String htmlFilePath) {
         outpFileFullPath = outpFilePath;
-        htmlFileFullPath = htmlFilepath;
+        htmlFileFullPath = htmlFilePath;
     }
 
     public void parse() {

@@ -15,7 +15,7 @@ public class WordCounter {
     }
 
     public void run() throws FileNotFoundException {
-        getUniqWords(outpFullFilePath, uniqFileFullPath);
+        getUniqWords1(outpFullFilePath, uniqFileFullPath);
         countCopies(outpFullFilePath, uniqFileFullPath, resFileFullPath);
     }
 
@@ -40,14 +40,14 @@ public class WordCounter {
         }
     }
 
-    private void getUniqWords(String outpFilePath, String uniqFilePath) throws FileNotFoundException {
-        try (BufferedReader fileBufferReader = new BufferedReader(new FileReader(outpFilePath))) {
+    /*private void getUniqWords(String outpFilePath, String uniqFilePath) throws FileNotFoundException {
+        try (BufferedReader wordsFileReader = new BufferedReader(new FileReader(outpFilePath))) {
             try (RandomAccessFile uniqWordsFileWriter = new RandomAccessFile(uniqFilePath, "rw")) {
                 FileOutputStream fos = new FileOutputStream(uniqWordsFileWriter.getFD());
                 OutputStreamWriter osw = new OutputStreamWriter(fos);
 
                 String word = "";
-                while ((word = fileBufferReader.readLine()) != null) {
+                while ((word = wordsFileReader.readLine()) != null) {
                     if (!isCopy(word, uniqWordsFileWriter)) {
                         osw.write(word + '\n');
                         osw.flush();
@@ -60,14 +60,31 @@ public class WordCounter {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }*/
+
+    private void getUniqWords1(String outpFilePath, String uniqFilePath) throws FileNotFoundException {
+        try (BufferedReader wordsFileReader = new BufferedReader(new FileReader(outpFilePath))) {
+
+            String word = "";
+            while ((word = wordsFileReader.readLine()) != null) {
+                BufferedReader uniqWordsFileReader = new BufferedReader(new FileReader(uniqFilePath));
+                if (!isCopy(word, uniqWordsFileReader)) {
+                    uniqWordsFileReader.close();
+                    try (FileWriter uniqWordsFileWriter = new FileWriter(uniqFilePath,true)) {
+                        uniqWordsFileWriter.write(word + '\n');
+                    }
+                }
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
-    private boolean isCopy(String currentWord, RandomAccessFile raf) throws IOException {
+    private boolean isCopy(String currentWord, BufferedReader br) throws IOException {
         String word;
-        raf.seek(0);
 
-        while ((word = raf.readLine()) != null) {
-            word = new String(word.getBytes("ISO-8859-1"), "UTF-8");
+        while ((word = br.readLine()) != null) {
             if (currentWord.equals(word)) {
                 return true;
             }

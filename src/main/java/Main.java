@@ -9,10 +9,13 @@ public class Main {
         // https://www.simbirsoft.com/
         System.out.println("Введите адрес сайта:");
         String url = scanner.nextLine();
+        //String url = "https://www.simbirsoft.com/";
         System.out.println("Введите путь до файла для загрузки страницы:");
         String path = scanner.nextLine();
+        //String path = "D:\\simbdata\\";
         System.out.println("Введите имя файла для загрузки страницы:");
         String fileName = scanner.nextLine();
+        //String fileName = "roflan.html";
         //path = "D:\\simbdata\\";
         //fileName = "roflan.html";
 
