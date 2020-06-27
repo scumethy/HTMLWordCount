@@ -16,14 +16,14 @@ public class WordCounter {
     }
 
     private void countCopies() {
-        try (BufferedReader fileBufferReader1 = new BufferedReader(new FileReader(uniqFilePath))) {
+        try (BufferedReader uniqWordsReader = new BufferedReader(new FileReader(uniqFilePath))) {
             String uniqWord;
             String word;
             int wordCount = 0;
             System.out.println("Частотный словарь HTMl контента введённой страницы:");
-            while ((uniqWord = fileBufferReader1.readLine()) != null) {
-                try (BufferedReader fileBufferReader2 = new BufferedReader(new FileReader(outpFilePath))) {
-                    while ((word = fileBufferReader2.readLine()) != null) {
+            while ((uniqWord = uniqWordsReader.readLine()) != null) {
+                try (BufferedReader allWordsReader = new BufferedReader(new FileReader(outpFilePath))) {
+                    while ((word = allWordsReader.readLine()) != null) {
                         if (word.equals(uniqWord)) {
                             wordCount++;
                         }
@@ -38,15 +38,15 @@ public class WordCounter {
     }
 
     private void getUniqWords() {
-        try (BufferedReader wordsFileReader = new BufferedReader(new FileReader(outpFilePath))) {
+        try (BufferedReader allWordsReader = new BufferedReader(new FileReader(outpFilePath))) {
 
             String word = "";
-            while ((word = wordsFileReader.readLine()) != null) {
-                BufferedReader uniqWordsFileReader = new BufferedReader(new FileReader(uniqFilePath));
-                if (!isCopy(word, uniqWordsFileReader)) {
-                    uniqWordsFileReader.close();
-                    try (FileWriter uniqWordsFileWriter = new FileWriter(uniqFilePath,true)) {
-                        uniqWordsFileWriter.write(word + '\n');
+            while ((word = allWordsReader.readLine()) != null) {
+                BufferedReader uniqWordsReader = new BufferedReader(new FileReader(uniqFilePath));
+                if (!isCopy(word, uniqWordsReader)) {
+                    uniqWordsReader.close();
+                    try (FileWriter uniqWordsWriter = new FileWriter(uniqFilePath,true)) {
+                        uniqWordsWriter.write(word + '\n');
                     }
                 }
             }

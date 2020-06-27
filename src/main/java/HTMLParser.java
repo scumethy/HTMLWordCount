@@ -24,11 +24,9 @@ public class HTMLParser {
             boolean endHtml = false;
             boolean openTag = false;
             boolean openIgnoreTag = false;
-            int lineCount = 0;
             PrintWriter pw = new PrintWriter(outpFileFullPath, "UTF-8");
 
             while (!endHtml && (fileLineContent = fileBufferReader.readLine()) != null) {
-                lineCount++;
 
                 for (int i = 0, n = fileLineContent.length(); i < n; i++) {
 
