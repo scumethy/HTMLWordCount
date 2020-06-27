@@ -1,58 +1,55 @@
 import java.io.*;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 public class WordCounter {
 
-    private final String filePath;
-    private final int lineCount;
+    private String outpFilePath;
+    private String outpFullFilePath;
+    private final String uniqFileFullPath;
+    private final String resFileFullPath;
 
-    public WordCounter(String filePath, int lineCount) {
-        this.filePath = filePath;
-        this.lineCount = lineCount;
+    public WordCounter(String path) {
+        outpFilePath = path;
+        outpFullFilePath = outpFilePath + "outp.txt";
+        uniqFileFullPath = outpFilePath + "uniq.txt";
+        resFileFullPath = outpFilePath + "res.txt";
     }
 
     public void run() throws FileNotFoundException {
-        getUniqWords();
-        countCopies();
+        getUniqWords(outpFullFilePath, uniqFileFullPath);
+        countCopies(outpFullFilePath, uniqFileFullPath, resFileFullPath);
     }
 
-    private void countCopies() {
-        try (BufferedReader fileBufferReader1 = new BufferedReader(new FileReader("/home/ilgiz/uniq.txt"))) {
-            try (BufferedReader fileBufferReader2 = new BufferedReader(new FileReader("/home/ilgiz/outp.txt"))) {
-                try (PrintWriter wcResWriter = new PrintWriter("/home/ilgiz/res.txt", "UTF-8")) {
-                    String uniqWord;
-                    String word;
-                    int wordCount = 0;
-                    while ((uniqWord = fileBufferReader1.readLine()) != null) {
-                        for (int i = 0; i < lineCount; i++) {
-                            word = fileBufferReader2.readLine();
-                            if (word.equals(uniqWord)) {
-                                wordCount++;
-                            }
+    private void countCopies(String outpFilePath, String uniqFilePath, String resFilePath) {
+        try (BufferedReader fileBufferReader1 = new BufferedReader(new FileReader(uniqFilePath))) {
+            String uniqWord;
+            String word;
+            int wordCount = 0;
+            while ((uniqWord = fileBufferReader1.readLine()) != null) {
+                try (BufferedReader fileBufferReader2 = new BufferedReader(new FileReader(outpFilePath))) {
+                    while ((word = fileBufferReader2.readLine()) != null) {
+                        if (word.equals(uniqWord)) {
+                            wordCount++;
                         }
-                        wcResWriter.write(uniqWord + ": " + wordCount);
-                        wordCount = 0;
                     }
                 }
+                System.out.println(uniqWord + " - " + wordCount);
+                wordCount = 0;
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    private void getUniqWords() throws FileNotFoundException {
-        try (BufferedReader fileBufferReader = new BufferedReader(new FileReader("/home/ilgiz/outp.txt"))) {
-            try (RandomAccessFile uniqWordsFileWriter = new RandomAccessFile("/home/ilgiz/uniq.txt", "rw")) {
+    private void getUniqWords(String outpFilePath, String uniqFilePath) throws FileNotFoundException {
+        try (BufferedReader fileBufferReader = new BufferedReader(new FileReader(outpFilePath))) {
+            try (RandomAccessFile uniqWordsFileWriter = new RandomAccessFile(uniqFilePath, "rw")) {
                 FileOutputStream fos = new FileOutputStream(uniqWordsFileWriter.getFD());
                 OutputStreamWriter osw = new OutputStreamWriter(fos);
 
                 String word = "";
-                for (int i = 0; i < lineCount; i++) {
-                    word = fileBufferReader.readLine();
+                while ((word = fileBufferReader.readLine()) != null) {
                     if (!isCopy(word, uniqWordsFileWriter)) {
-                        osw.write(word+'\n');
+                        osw.write(word + '\n');
                         osw.flush();
                     }
                 }
@@ -71,7 +68,6 @@ public class WordCounter {
 
         while ((word = raf.readLine()) != null) {
             word = new String(word.getBytes("ISO-8859-1"), "UTF-8");
-            System.out.println(word);
             if (currentWord.equals(word)) {
                 return true;
             }

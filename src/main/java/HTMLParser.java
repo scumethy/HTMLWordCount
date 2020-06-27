@@ -6,25 +6,28 @@ import java.util.List;
 
 public class HTMLParser {
 
-    private final String filePath;
+    private String outpFileFullPath;
+    private String htmlFileFullPath;
 
-    public HTMLParser(String path) {
-        filePath = path;
+    public HTMLParser(String outpFilePath, String htmlFilepath) {
+        outpFileFullPath = outpFilePath;
+        htmlFileFullPath = htmlFilepath;
     }
 
-    public int parse() {
-        try (BufferedReader fileBufferReader = new BufferedReader(new FileReader(filePath))) {
+    public void parse() {
+        try (BufferedReader fileBufferReader = new BufferedReader(new FileReader(htmlFileFullPath))) {
             String fileLineContent;
             StringBuilder res = new StringBuilder();
             StringBuilder tagName = new StringBuilder();
             List<String> ignoredTags = new ArrayList<>(Arrays.asList("style", "script", "image", "object"));
             List<String> closeIgnoredTags = new ArrayList<>(Arrays.asList("/style", "/script", "/image", "/object"));
+            boolean endHtml = false;
             boolean openTag = false;
             boolean openIgnoreTag = false;
             int lineCount = 0;
-            PrintWriter pw = new PrintWriter("/home/ilgiz/outp.txt", "UTF-8");
+            PrintWriter pw = new PrintWriter(outpFileFullPath, "UTF-8");
 
-            while ((fileLineContent = fileBufferReader.readLine()) != null) {
+            while (!endHtml && (fileLineContent = fileBufferReader.readLine()) != null) {
                 lineCount++;
 
                 for (int i = 0, n = fileLineContent.length(); i < n; i++) {
@@ -41,6 +44,10 @@ public class HTMLParser {
                         tagName = new StringBuilder();
                     } else if (openTag) {
                         tagName.append(c);
+                        if (tagName.toString().equals("/html")) {
+                            endHtml = true;
+                            break;
+                        }
                         if (ignoredTags.contains(tagName.toString())) {
                             openIgnoreTag = true;
                         } else if (closeIgnoredTags.contains(tagName.toString())) {
@@ -61,11 +68,9 @@ public class HTMLParser {
                 res = new StringBuilder();
             }
             pw.close();
-            return lineCount;
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return 0;
     }
 
 }
