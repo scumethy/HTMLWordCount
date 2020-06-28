@@ -1,10 +1,9 @@
-import java.io.FileNotFoundException;
-import java.util.Scanner;
+import manager.Manager;
 
 public class Main {
 
     public static void main(String[] args) {
-        HTMLManager manager = new HTMLManager();
+        Manager manager = new Manager();
         manager.run();
     }
 }

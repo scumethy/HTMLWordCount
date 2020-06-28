@@ -1,19 +1,38 @@
+package manager;
+
+import counter.WordCounter;
+import parser.HTMLParser;
+
 import java.io.*;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.Scanner;
 
-public class HTMLManager {
+/**
+ * Class which input data, download web-page, create files,
+ * and run parser and word counter
+ */
+public class Manager {
 
+    /** url address for word counting */
     public String url = null;
+    /** path to store execution necessary files */
     public String path;
+    /** html source file name */
     public String fileName;
 
+    /** html content file */
     public File htmlSource;
+    /** splitted words of html content file */
     public File htmlWords;
+    /** unique words file */
     public File uniqWords;
 
+
+    /**
+     * Manage scenario input->files routine->download webpage->word count
+     */
     public void run() {
 
         while (!inputData()) {
@@ -31,6 +50,13 @@ public class HTMLManager {
 
     }
 
+
+    /**
+     * Method which create
+     *   .html file for download web page to it
+     *   outp.txt for store splitted words of html content
+     *   uniq.txt for store all unique words of html content
+     */
     private void filesPrepares() {
         try {
             htmlSource = new File(path + "source.html");
@@ -44,6 +70,11 @@ public class HTMLManager {
         }
     }
 
+    /**
+     * Method which input from console: url, path for create file there, html file name
+     * Return true if url and system paths are correct and false if any of them incorrect
+     * @return true or false
+     */
     private boolean inputData() {
         Scanner scanner = new Scanner(System.in);
         // https://www.simbirsoft.com/
@@ -79,6 +110,12 @@ public class HTMLManager {
         return true;
     }
 
+    /**
+     * Bufferized download web page
+     *
+     * @param htmlSourcesFilePath the path for create html file there
+     * @return the string
+     */
     private String download(String htmlSourcesFilePath) {
         try {
             URL u = new URL(url);

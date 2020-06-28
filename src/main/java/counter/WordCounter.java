@@ -1,8 +1,19 @@
+package counter;
+
 import java.io.*;
 
+/**
+ * Class which counting all words and output to console frequency dictionary
+ */
 public class WordCounter {
 
+    /**
+     * path to splitted words file
+     */
     private final String outpFilePath;
+    /**
+     * path to uniq file
+     */
     private final String uniqFilePath;
 
     public WordCounter(String outpFilePath, String uniqFilePath) {
@@ -10,11 +21,19 @@ public class WordCounter {
         this.uniqFilePath = uniqFilePath;
     }
 
+
+    /**
+     * Method which runs getUniqWords() and countCopies() methods
+     */
     public void count() {
         getUniqWords();
         countCopies();
     }
 
+
+    /**
+     * Count how many times every uniq words occur in the splitted words file
+     */
     private void countCopies() {
         try (BufferedReader uniqWordsReader = new BufferedReader(new FileReader(uniqFilePath))) {
             String uniqWord;
@@ -37,6 +56,11 @@ public class WordCounter {
         }
     }
 
+
+    /**
+     * Select all uniq words from splitted words file.
+     * Write these uniq words to another file.
+     */
     private void getUniqWords() {
         try (BufferedReader allWordsReader = new BufferedReader(new FileReader(outpFilePath))) {
 
@@ -45,7 +69,7 @@ public class WordCounter {
                 BufferedReader uniqWordsReader = new BufferedReader(new FileReader(uniqFilePath));
                 if (!isCopy(word, uniqWordsReader)) {
                     uniqWordsReader.close();
-                    try (FileWriter uniqWordsWriter = new FileWriter(uniqFilePath,true)) {
+                    try (FileWriter uniqWordsWriter = new FileWriter(uniqFilePath, true)) {
                         uniqWordsWriter.write(word + '\n');
                     }
                 }
@@ -56,6 +80,16 @@ public class WordCounter {
         }
     }
 
+    /**
+     * Checks if the current word in the uniq words file already
+     * Return true if current word in uniq file.
+     * Return false if current word not yet in the uniq file.
+     *
+     * @param currentWord the current word for check
+     * @param br          reader for read words from uniq words file
+     * @return true or false
+     * @throws IOException the io exception
+     */
     private boolean isCopy(String currentWord, BufferedReader br) throws IOException {
         String word;
 
