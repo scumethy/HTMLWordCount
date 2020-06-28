@@ -65,13 +65,13 @@ public class Manager {
 
     /**
      * Method which create
-     * .html file for download web page to it
+     * *.html file for download web page to it
      * outp.txt for store splitted words of html content
      * uniq.txt for store all unique words of html content
      */
     private void filesPrepares() {
         try {
-            htmlSource = new File(path + "source.html");
+            htmlSource = new File(path + fileName);
             if (!htmlSource.exists()) {
                 htmlSource.createNewFile();
             }
