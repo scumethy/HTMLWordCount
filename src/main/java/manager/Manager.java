@@ -15,18 +15,30 @@ import java.util.Scanner;
  */
 public class Manager {
 
-    /** url address for word counting */
+    /**
+     * url address for word counting
+     */
     public String url = null;
-    /** path to store execution necessary files */
+    /**
+     * path to store execution necessary files
+     */
     public String path;
-    /** html source file name */
+    /**
+     * html source file name
+     */
     public String fileName;
 
-    /** html content file */
+    /**
+     * html content file
+     */
     public File htmlSource;
-    /** splitted words of html content file */
+    /**
+     * splitted words of html content file
+     */
     public File htmlWords;
-    /** unique words file */
+    /**
+     * unique words file
+     */
     public File uniqWords;
 
 
@@ -53,18 +65,24 @@ public class Manager {
 
     /**
      * Method which create
-     *   .html file for download web page to it
-     *   outp.txt for store splitted words of html content
-     *   uniq.txt for store all unique words of html content
+     * .html file for download web page to it
+     * outp.txt for store splitted words of html content
+     * uniq.txt for store all unique words of html content
      */
     private void filesPrepares() {
         try {
             htmlSource = new File(path + "source.html");
-            htmlSource.createNewFile();
+            if (!htmlSource.exists()) {
+                htmlSource.createNewFile();
+            }
             htmlWords = new File(path + "outp.txt");
-            htmlWords.createNewFile();
+            if (!htmlWords.exists()) {
+                htmlWords.createNewFile();
+            }
             uniqWords = new File(path + "uniq.txt");
-            uniqWords.createNewFile();
+            if (!uniqWords.exists()) {
+                uniqWords.createNewFile();
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -73,22 +91,18 @@ public class Manager {
     /**
      * Method which input from console: url, path for create file there, html file name
      * Return true if url and system paths are correct and false if any of them incorrect
+     *
      * @return true or false
      */
     private boolean inputData() {
         Scanner scanner = new Scanner(System.in);
-        // https://www.simbirsoft.com/
         System.out.println("Введите адрес сайта:");
         url = scanner.nextLine();
-        //String url = "https://www.simbirsoft.com/";
         System.out.println("Введите путь до файла для загрузки страницы:");
         path = scanner.nextLine();
-        //String path = "D:\\simbdata\\";
         System.out.println("Введите имя файла для загрузки страницы:");
         fileName = scanner.nextLine();
-        //String fileName = "roflan.html";
-        //path = "D:\\simbdata\\";
-        //fileName = "roflan.html";
+
 
         try {
             URL connectionURL = new URL(url);
