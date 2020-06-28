@@ -80,9 +80,10 @@ public class Manager {
                 htmlWords.createNewFile();
             }
             uniqWords = new File(path + "uniq.txt");
-            if (!uniqWords.exists()) {
-                uniqWords.createNewFile();
+            if (uniqWords.exists()) {
+                uniqWords.delete();
             }
+            uniqWords.createNewFile();
         } catch (IOException e) {
             e.printStackTrace();
         }
